@@ -2,4 +2,12 @@
 
 <p>{{ctrl.var}}</p>
 
-<ng-map center="[0, 0]"></ng-map>
+<ng-map center="[0, 0]">
+	<marker ng-repeat="event in ctrl.events"
+		position="{{event.location}}">
+	</marker>
+</ng-map>
+
+<div ng-repeat="event in ctrl.events">
+	<p>{{event.name}}</p>
+</div>

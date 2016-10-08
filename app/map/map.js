@@ -11,6 +11,17 @@ angular.module('myApp.map', ['ngRoute','ngMap'])
 
 .controller('mapViewCtrl', ['NgMap', 'NavigatorGeolocation', '$http', function(NgMap, NavigatorGeolocation, $http) {
 	var self = this;
+
+	self.events = [
+		{
+			name: 'Hack Umass',
+			location: [42.391, -72.526]
+		},
+		{
+			name: 'Chill @ Sam\'s',
+			location: [42.388570, -72.529235]
+		}
+	];
 	
 	$http.get('/secrets.json').then(function successCallback(response){
 		self.key = response.data.key;
