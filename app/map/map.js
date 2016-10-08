@@ -9,7 +9,7 @@ angular.module('myApp.map', ['ngRoute','ngMap'])
   });
 }])
 
-.controller('mapViewCtrl', ['NgMap', '$http', function(NgMap, $http) {
+.controller('mapViewCtrl', ['NgMap', 'NavigatorGeolocation', '$http', function(NgMap, NavigatorGeolocation, $http) {
 	var self = this;
 	
 	$http.get('/secrets.json').then(function successCallback(response){
@@ -19,8 +19,15 @@ angular.module('myApp.map', ['ngRoute','ngMap'])
 	});
 	
 	NgMap.getMap().then(function(map) {
+		self.map = map;
 		console.log(map.getCenter());
 		console.log('markers', map.markers);
 		console.log('shapes', map.shapes);
+
+		NavigatorGeolocation.getCurrentPosition().then(function(position) {
+			self.location = {lat: position.coords.latitude, lng: position.coords.longitude};
+			self.map.panTo(self.location);
+		});
   	});
+
 }]);
