@@ -1,13 +1,24 @@
-<p>This is the partial for view 1.</p>
 
-<p>{{ctrl.var}}</p>
+	<div flex-gt-sm="50" flex>
+		<ng-map center="[0, 0]">
+			<marker ng-repeat="event in ctrl.events"
+				position="{{event.location}}">
+			</marker>
+		</ng-map>
+		<md-toolbar layout="row" class="md-hue-3">
+			<div class="md-toolbar-tools">
+				<span>Events nearby</span>
+			</div>
+		</md-toolbar>
 
-<ng-map center="[0, 0]">
-	<marker ng-repeat="event in ctrl.events"
-		position="{{event.location}}">
-	</marker>
-</ng-map>
-
-<div ng-repeat="event in ctrl.events">
-	<p>{{event.name}}</p>
-</div>
+		<md-content>
+			<md-list flex>
+				<md-list-item class="md-3-line" ng-repeat="event in ctrl.events" ng-click="null">
+					<div class="md-list-item-text" layout="column">
+						<h3>{{ event.name }}</h3>
+						<h4>{{ event.location }}</h4>
+					</div>
+				</md-list-item>
+			</md-list>
+		</md-content>
+	</div>

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.map', ['ngRoute','ngMap'])
+angular.module('myApp.map', ['ngRoute','ngMap', 'ngMaterial'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/map', {
@@ -31,13 +31,10 @@ angular.module('myApp.map', ['ngRoute','ngMap'])
 	
 	NgMap.getMap().then(function(map) {
 		self.map = map;
-		console.log(map.getCenter());
-		console.log('markers', map.markers);
-		console.log('shapes', map.shapes);
 
 		NavigatorGeolocation.getCurrentPosition().then(function(position) {
 			self.location = {lat: position.coords.latitude, lng: position.coords.longitude};
-			self.map.panTo(self.location);
+			self.map.setCenter(self.location);
 		});
   	});
 
