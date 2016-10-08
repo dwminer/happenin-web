@@ -1,5 +1,255 @@
-<p>This is the partial for view 2.</p>
-<p>
-  Showing of 'interpolate' filter:
-  {{ 'Current version is v%VERSION%.' | interpolate }}
-</p>
+<html>
+<body>
+
+<form action="action_page.php">
+	Event Title: <br>
+	<input id="pac-input" type="text" class = "controls" value="" placeholder = "Enter a title">
+	<br><br>
+	Event Category: <br>
+	<select id="pac-input" class = "controls">
+		<option value="Sports">Sports</option>
+		<option value="Gaming">Gaming</option>
+		<option value="Social">Social</option>
+		<option value="Outing">Outing</option>
+		<option value="Volunteer">Volunteer</option>
+	</select>
+	<br><br>
+	Event Location: <br>
+		<title>Place Autocomplete</title>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<style>
+		  html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		  }
+		  #map {
+			height: 100%;
+		  }
+		  .controls {
+			margin-top: 10px;
+			border: 1px solid transparent;
+			border-radius: 2px 0 0 2px;
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			height: 32px;
+			outline: none;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+		  }
+		  .controlslarge {
+		  	margin-top: 10px;
+			border: 1px solid transparent;
+			border-radius: 2px 0 0 2px;
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			height: 80px;
+			outline: none;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+		  }
+		  #pac-input {
+			background-color: #fff;
+			font-family: Roboto;
+			font-size: 15px;
+			font-weight: 300;
+			margin-left: 12px;
+			padding: 0 11px 0 13px;
+			text-overflow: ellipsis;
+			width: 300px;
+		  }
+
+		  #pac-input:focus {
+			border-color: #4d90fe;
+		  }
+
+		  .pac-container {
+			font-family: Roboto;
+		  }
+
+		  #type-selector {
+			color: #fff;
+			background-color: #4d90fe;
+			padding: 5px 11px 0px 11px;
+			width: 675px;
+		  }
+
+		  #type-selector label {
+			font-family: Roboto;
+			font-size: 13px;
+			font-weight: 300;
+		  }
+		</style>
+	  </head>
+	  <body>
+		<input id="pac-input" class="controls" type="text"
+			placeholder="Enter a location">
+		<div id="type-selector" class="controls">
+		  <input type="radio" name="type" id="changetype-all" checked="checked">
+		  <label for="changetype-all">All</label>
+
+		  <input type="radio" name="type" id="changetype-establishment">
+		  <label for="changetype-establishment">Establishments</label>
+
+		  <input type="radio" name="type" id="changetype-address">
+		  <label for="changetype-address">Addresses</label>
+
+		  <input type="radio" name="type" id="changetype-geocode">
+		  <label for="changetype-geocode">Geocodes</label>
+		</div>
+		<div id="map"></div>
+
+		<script>
+		  // This example requires the Places library. Include the libraries=places
+		  // parameter when you first load the API. For example:
+		  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+		  function initMap() {
+			var map = new google.maps.Map(document.getElementById('map'), {
+			  center: {lat: -33.8688, lng: 151.2195},
+			  zoom: 13
+			});
+			var input = /** @type {!HTMLInputElement} */(
+				document.getElementById('pac-input'));
+
+			var types = document.getElementById('type-selector');
+			map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+			map.controls[google.maps.ControlPosition.TOP_LEFT].push(types);
+
+			var autocomplete = new google.maps.places.Autocomplete(input);
+			autocomplete.bindTo('bounds', map);
+
+			var infowindow = new google.maps.InfoWindow();
+			var marker = new google.maps.Marker({
+			  map: map,
+			  anchorPoint: new google.maps.Point(0, -29)
+			});
+
+			autocomplete.addListener('place_changed', function() {
+			  infowindow.close();
+			  marker.setVisible(false);
+			  var place = autocomplete.getPlace();
+			  if (!place.geometry) {
+				window.alert("Autocomplete's returned place contains no geometry");
+				return;
+			  }
+
+			  // If the place has a geometry, then present it on a map.
+			  if (place.geometry.viewport) {
+				map.fitBounds(place.geometry.viewport);
+			  } else {
+				map.setCenter(place.geometry.location);
+				map.setZoom(17);  // Why 17? Because it looks good.
+			  }
+			  marker.setIcon(/** @type {google.maps.Icon} */({
+				url: place.icon,
+				size: new google.maps.Size(71, 71),
+				origin: new google.maps.Point(0, 0),
+				anchor: new google.maps.Point(17, 34),
+				scaledSize: new google.maps.Size(35, 35)
+			  }));
+			  marker.setPosition(place.geometry.location);
+			  marker.setVisible(true);
+
+			  var address = '';
+			  if (place.address_components) {
+				address = [
+				  (place.address_components[0] && place.address_components[0].short_name || ''),
+				  (place.address_components[1] && place.address_components[1].short_name || ''),
+				  (place.address_components[2] && place.address_components[2].short_name || '')
+				].join(' ');
+			  }
+
+			  infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+			  infowindow.open(map, marker);
+			});
+
+			// Sets a listener on a radio button to change the filter type on Places
+			// Autocomplete.
+			function setupClickListener(id, types) {
+			  var radioButton = document.getElementById(id);
+			  radioButton.addEventListener('click', function() {
+				autocomplete.setTypes(types);
+			  });
+			}
+
+			setupClickListener('changetype-all', []);
+			setupClickListener('changetype-address', ['address']);
+			setupClickListener('changetype-establishment', ['establishment']);
+			setupClickListener('changetype-geocode', ['geocode']);
+		  }
+		</script>
+		
+				<div flex-gt-sm="50" flex>
+		<ng-map center="[0, 0]">
+			<marker ng-repeat="event in ctrl.events"
+				position="{{event.location}}">
+			</marker>
+		</ng-map><br>
+		
+	Event Description: <br>
+	<textarea id="pac-input" type="text" class = "controlslarge" value="" placeholder = "Enter a description"></textarea>
+	<br><br>
+	
+	Event Date: <br>
+	<input id="pac-input" type="text" class = "controls" value="" placeholder = "Enter a date in the form mm/dd/yyyy">
+	<br><br>
+	
+	Event Time: <br>
+	<select id="pac-input" class = "controls">
+	  <option value="0">12:00 am</option>
+	  <option value="1">12:30 am</option>
+	  <option value="2">1:00 am</option>
+	  <option value="3">1:30 am</option>
+	  <option value="4">2:00 am</option>
+	  <option value="5">2:30 am</option>
+	  <option value="6">3:00 am</option>
+	  <option value="7">3:30 am</option>
+	  <option value="8">4:00 am</option>
+	  <option value="9">4:30 am</option>
+	  <option value="10">5:00 am</option>
+	  <option value="11">5:30 am</option>
+	  <option value="12">6:00 am</option>
+	  <option value="13">6:30 am</option>
+	  <option value="14">7:00 am</option>
+	  <option value="15">7:30 am</option>
+	  <option value="16">8:00 am</option>
+	  <option value="17">8:30 am</option>
+	  <option value="18">9:00 am</option>
+	  <option value="19">9:30 am</option>
+	  <option value="20">10:00 am</option>
+	  <option value="21">10:30 am</option>
+	  <option value="22">11:00 am</option>
+	  <option value="23">11:30 am</option>
+	  <option value="24">12:00 pm</option>
+	  <option value="25">12:30 pm</option>
+	  <option value="26">1:00 pm</option>
+	  <option value="27">1:30 pm</option>
+	  <option value="28">2:00 pm</option>
+	  <option value="29">2:30 pm</option>
+	  <option value="30">3:00 pm</option>
+	  <option value="31">3:30 pm</option>
+	  <option value="32">4:00 pm</option>
+	  <option value="33">4:30 pm</option>
+	  <option value="34">5:00 pm</option>
+	  <option value="35">5:30 pm</option>
+	  <option value="36">6:00 pm</option>
+	  <option value="37">6:30 pm</option>
+	  <option value="38">7:00 pm</option>
+	  <option value="39">7:30 pm</option>
+	  <option value="40">8:00 pm</option>
+	  <option value="41">8:30 pm</option>
+	  <option value="42">9:00 pm</option>
+	  <option value="43">9:30 pm</option>
+	  <option value="44">10:00 pm</option>
+	  <option value="45">10:30 pm</option>
+	  <option value="46">11:00 pm</option>
+	  <option value="47">11:30 pm</option>
+	</select>
+	<br><br>
+	
+	Event Duration <br>
+	<input id="pac-input" type="text" class = "controls" value="" placeholder = "Enter a time in hours">
+	<br><br>
+	
+	<input type="submit" value="Submit">
+</form>
