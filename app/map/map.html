@@ -16,7 +16,7 @@
 					</div>
 				</md-toolbar>
 				<md-content flex>
-					<ng-map center="[0, 0]">
+					<ng-map center="[42.3910571, -72.5261699]" ng-init="ctrl.center()">
 						<marker ng-repeat="event in ctrl.events | eventFilter : ctrl.search : ctrl.sel_categories"
 							position="{{event.location}}">
 						</marker>
