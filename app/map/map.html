@@ -1,23 +1,21 @@
 	<div flex-gt-sm="100" flex>
-		<section layout="column">
-			<md-content flex layout-padding>
+		<section layout="row">
+			<md-content flex layout-padding flex-gt-sm="20">
 				<md-input-container>
 					<label>Search near you</label>
 					<input ng-model="ctrl.search.$"></input>
 				</md-input-container>
-				<section layout="column">
 					<fieldset class="standard">
-						<md-checkbox ng-repeat="cat in ctrl.categories" ng-model="ctrl.sel_categories[cat]">{{cat}}</checkbox>
+						<md-list><md-list-item class="md-1-line" ng-repeat="cat in ctrl.categories"><div class="md-list-item-text"><md-checkbox ng-model="ctrl.sel_categories[cat]">{{cat}}</checkbox></div></md-list-item></md-list>
 					</fieldset>
-				</section>					
 			</md-content>
-			<section layout="column">
+			<section layout="column" flex-gt-sm="80">
 				<md-toolbar class="md-hue-3">
 					<div class="md-toolbar-tools">
 						<span>Events nearby</span>
 					</div>
 				</md-toolbar>
-				<md-content flex layout-padding>
+				<md-content flex>
 					<ng-map center="[0, 0]">
 						<marker ng-repeat="event in ctrl.events | eventFilter : ctrl.search : ctrl.sel_categories"
 							position="{{event.location}}">
@@ -25,7 +23,7 @@
 					</ng-map>
 				</md-content>
 
-				<md-content flex layout-padding>
+				<md-content flex>
 					<md-list flex>
 						<md-list-item class="md-3-line" ng-repeat="event in ctrl.events | eventFilter : ctrl.search : ctrl.sel_categories" ng-click="null">
 							<div class="md-list-item-text" layout="column">
