@@ -9,14 +9,24 @@ angular.module('myApp.addevent', ['ngRoute', 'ngMap'])
   });
 }])
 
-.controller('addEventCtrl', ['NgMap', function(NgMap) {
+.controller('addEventCtrl', ['NgMap', 'NavigatorGeolocation', '$http', function(NgMap, NavigatorGeolocation, $http) {
 	var vm = this;
-  vm.types = "['establishment']";
-  vm.placeChanged = function() {
+	vm.types = "['establishment']";
+	vm.placeChanged = function() {
     vm.place = this.getPlace();
     console.log('location', vm.place.geometry.location);
-    vm.map.setCenter(vm.place.geometry.location);
+
   }
+  
+	NgMap.getMap().then(function(map) {
+		vm.map = map;
+
+		NavigatorGeolocation.getCurrentPosition().then(function(position) {
+			vm.location = {lat: position.coords.latitude, lng: position.coords.longitude};
+			vm.map.setCenter(vm.location);
+		});
+  	});
+	
   NgMap.getMap().then(function(map) {
     vm.map = map;
   });

@@ -14,7 +14,7 @@ angular.module('myApp.map', ['ngRoute','ngMap', 'ngMaterial'])
 
 	self.events = [
 		{
-			name: 'Hack Umass',
+			name: 'Hack UMass',
 			location: [42.391, -72.526],
 			location_desc: 'Integrative Learning Center',
 			time: new Date(),

@@ -26,7 +26,7 @@
     <style>
       html, body {
         height: 100%;
-        margin: 0;
+        margin: 10px;
         padding: 0;
       }
       #map {
@@ -42,6 +42,16 @@
         outline: none;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       }
+	  .controlslarge {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 80px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
 
       #pac-input {
         background-color: #fff;
@@ -51,7 +61,7 @@
         margin-left: 12px;
         padding: 0 11px 0 13px;
         text-overflow: ellipsis;
-        width: 300px;
+        width: 500px;
       }
 
       #pac-input:focus {
@@ -76,7 +86,7 @@
     </style>
   </head>
 
-  <input places-auto-complete size=80
+  <input id="pac-input" places-auto-complete class = "controls" size=80
     ng-model="vm.address"
     component-restrictions="{country:'us'}"
     types="{{types}}"
@@ -84,9 +94,9 @@
   <div ng-show="vm.place">
     Address = {{vm.place.formatted_address}} <br/>
     Location: {{vm.place.geometry.location}}<br/>
-  </div>
+  </div><br>
   Map : {{vm.address}}
-  <ng-map></ng-map>
+  <ng-map></ng-map><br>
 		
 	Event Description: <br>
 	<textarea id="pac-input" type="text" class = "controlslarge" value="" placeholder = "Enter a description"></textarea>
@@ -153,5 +163,5 @@
 	<input id="pac-input" type="text" class = "controls" value="" placeholder = "Enter a time in hours">
 	<br><br>
 	
-	<input type="submit" value="Submit">
+	<input type="submit" value="Submit"><br><br>
 </form>
