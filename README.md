@@ -4,7 +4,7 @@ Install node/npm
 
 Clone repo:
 ```
-git clone https://github.uconn.edu/dwm10005/happenin-web
+git clone https://github.com/dwminer/happenin-web
 ```
 
 cd to project
