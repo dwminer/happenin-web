@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.addevent', ['ngRoute', 'ngMap'])
+angular.module('myApp.addevent', ['ngRoute', 'ngMap', 'myApp'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/addevent', {
@@ -9,8 +9,11 @@ angular.module('myApp.addevent', ['ngRoute', 'ngMap'])
   });
 }])
 
-.controller('addEventCtrl', ['NgMap', 'NavigatorGeolocation', '$http', function(NgMap, NavigatorGeolocation, $http) {
+.controller('addEventCtrl', ['NgMap', 'NavigatorGeolocation', '$http', 'EventService', function(NgMap, NavigatorGeolocation, $http, EventService) {
 	var vm = this;
+
+	vm.events = EventService.events;
+
 	vm.types = "['establishment']";
 	vm.placeChanged = function() {
     vm.place = this.getPlace();
