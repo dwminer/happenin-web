@@ -5,13 +5,6 @@
 					<label>Search near you</label>
 					<input ng-model="ctrl.search.$"></input>
 				</md-input-container>
-				<md-slider-container>
-					<span>Radius</span>
-					<md-slider flex step="0.5" min=".5" max="5" ng-model="ctrl.radius" aria-label="radius" id="radius_slider"></md-slider>
-					<md-input-container>
-						<input flex type="number" min="0.5" max="5" ng-model="ctrl.radius" aria-label="radius" aria-controls="radius_slider">
-					</md-input-container>
-				</md-slider-container>
 				<section layout="column">
 					<fieldset class="standard">
 						<md-checkbox ng-repeat="cat in ctrl.categories" ng-model="ctrl.sel_categories[cat]">{{cat}}</checkbox>
