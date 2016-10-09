@@ -1,24 +1,48 @@
-
-	<div flex-gt-sm="50" flex>
-		<ng-map center="[0, 0]">
-			<marker ng-repeat="event in ctrl.events"
-				position="{{event.location}}">
-			</marker>
-		</ng-map>
-		<md-toolbar layout="row" class="md-hue-3">
-			<div class="md-toolbar-tools">
-				<span>Events nearby</span>
-			</div>
-		</md-toolbar>
-
-		<md-content>
-			<md-list flex>
-				<md-list-item class="md-3-line" ng-repeat="event in ctrl.events" ng-click="null">
-					<div class="md-list-item-text" layout="column">
-						<h3>{{ event.name }}</h3>
-						<h4>{{ event.location }}</h4>
+	<div flex-gt-sm="100" flex>
+		<section layout="column">
+			<md-content flex layout-padding>
+				<md-input-container>
+					<label>Search near you</label>
+					<input ng-model="ctrl.search.$"></input>
+				</md-input-container>
+				<md-slider-container>
+					<span>Radius</span>
+					<md-slider flex step="0.5" min=".5" max="5" ng-model="ctrl.radius" aria-label="radius" id="radius_slider"></md-slider>
+					<md-input-container>
+						<input flex type="number" min="0.5" max="5" ng-model="ctrl.radius" aria-label="radius" aria-controls="radius_slider">
+					</md-input-container>
+				</md-slider-container>
+				<section layout="column">
+					<fieldset class="standard">
+						<md-checkbox ng-repeat="cat in ctrl.categories" ng-model="ctrl.sel_categories[cat]">{{cat}}</checkbox>
+					</fieldset>
+				</section>					
+			</md-content>
+			<section layout="column">
+				<md-toolbar class="md-hue-3">
+					<div class="md-toolbar-tools">
+						<span>Events nearby</span>
 					</div>
-				</md-list-item>
-			</md-list>
-		</md-content>
+				</md-toolbar>
+				<md-content flex layout-padding>
+					<ng-map center="[0, 0]">
+						<marker ng-repeat="event in ctrl.events | eventFilter : ctrl.search : ctrl.sel_categories"
+							position="{{event.location}}">
+						</marker>
+					</ng-map>
+				</md-content>
+
+				<md-content flex layout-padding>
+					<md-list flex>
+						<md-list-item class="md-3-line" ng-repeat="event in ctrl.events | eventFilter : ctrl.search : ctrl.sel_categories" ng-click="null">
+							<div class="md-list-item-text" layout="column">
+								<h3>{{ event.name }}</h3>
+								<h4>{{ event.location_desc }}</h4>
+								<p>Happenin' {{event.time | timefilter}}</p>
+							</div>
+						</md-list-item>
+					</md-list>
+				</md-content>
+			</section>
+		</section>
 	</div>
