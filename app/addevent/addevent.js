@@ -9,7 +9,7 @@ angular.module('myApp.addevent', ['ngRoute', 'ngMap', 'myApp'])
   });
 }])
 
-.controller('addEventCtrl', ['NgMap', 'NavigatorGeolocation', '$http', 'EventService', function(NgMap, NavigatorGeolocation, $http, EventService) {
+.controller('addEventCtrl', ['NgMap', 'NavigatorGeolocation', '$http', 'EventService', '$location', function(NgMap, NavigatorGeolocation, $http, EventService, $location) {
 	var vm = this;
 
 	vm.events = EventService.events;
@@ -33,4 +33,19 @@ angular.module('myApp.addevent', ['ngRoute', 'ngMap', 'myApp'])
   NgMap.getMap().then(function(map) {
     vm.map = map;
   });
+
+	vm.submit = function() {
+		var event = {
+			name: vm.name,
+			category: vm.category,
+			location: [vm.place.geometry.location.lat(), vm.place.geometry.location.lng()],
+			location_desc: vm.place.formatted_address,
+			description: vm.description,
+			time: new Date(2016, vm.month + 1, vm.day, vm.hour, vm.minute)
+		};
+
+		vm.events.push(event);		
+		console.log(event);
+		$location.path('/map');
+	}
 }]);

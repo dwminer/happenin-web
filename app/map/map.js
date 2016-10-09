@@ -38,14 +38,16 @@ angular.module('myApp.map', ['ngRoute','ngMap', 'ngMaterial', 'myApp'])
 		console.log("Failed to fetch api key");
 	});
 	
-	NgMap.getMap().then(function(map) {
-		self.map = map;
+	self.center = function(){
+		NgMap.getMap().then(function(map) {
+			self.map = map;
 
-		NavigatorGeolocation.getCurrentPosition().then(function(position) {
-			self.location = {lat: position.coords.latitude, lng: position.coords.longitude};
-			self.map.setCenter(self.location);
+			NavigatorGeolocation.getCurrentPosition().then(function(position) {
+				self.location = {lat: position.coords.latitude, lng: position.coords.longitude};
+				self.map.setCenter(self.location);
+			});
 		});
-  	});
+	}
 
 }])
 
