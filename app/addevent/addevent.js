@@ -41,7 +41,8 @@ angular.module('myApp.addevent', ['ngRoute', 'ngMap', 'myApp'])
 			location: [vm.place.geometry.location.lat(), vm.place.geometry.location.lng()],
 			location_desc: vm.place.formatted_address,
 			description: vm.description,
-			time: new Date(2016, vm.month + 1, vm.day, vm.hour, vm.minute)
+			time: new Date(2016, vm.month + 1, vm.day, vm.hour, vm.minute),
+			duration: vm.duration
 		};
 
 		vm.events.push(event);		
