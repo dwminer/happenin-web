@@ -48,6 +48,7 @@ angular.module('myApp.map', ['ngRoute','ngMap', 'ngMaterial', 'myApp'])
   	});
 
 }])
+
 .filter('timefilter', function() {
 	return function(dateobj) {
 		var now = new Date();
@@ -55,20 +56,48 @@ angular.module('myApp.map', ['ngRoute','ngMap', 'ngMaterial', 'myApp'])
 		{
 			return "now!";
 		}
-		else if (dateobj.getTime() - now.getTime() <= 60 * 60 * 1000)
+		else if ((dateobj.getTime() - now.getTime()) <= (60 * 2 * 1000))
 		{
-			return "in " + (dateobj.getTime() - now.getTime())/(60*1000) + " minutes!";
+			return "in 1 minute!";
 		}
-		else if (dateobj.getDay() == now.getDay() && dateobj.getMonth() == now.getMonth())
+		else if ((dateobj.getTime() - now.getTime()) < (60 * 60 * 1000))
 		{
-			return "in " + (dateobj.getTime() - now.getTime())/(60*60*1000) + " hours.";
+			return "in " + Math.floor((dateobj.getTime() - now.getTime())/(60*1000)) + " minutes!";
+		}
+		else if (dateobj.getDate() == now.getDate())
+		{
+			if ((dateobj.getHours() - 12) < 0)
+			{
+				return "at " + dateobj.getHours() + ":" + dateobj.getMinutes() + "am today!";
+			}else{
+				return "at " + (dateobj.getHours()-12) + ":" + dateobj.getMinutes() + "pm today!";
+			}
 		}
 		else
 		{
-			return dateobj.getHours() + ":" + dateobj.getMinutes() + " on " + dateobj.getMonth() + "/" + dateobj.getDay() + ".";
+			if ((dateobj.getHours() - 12) < 0)
+			{
+				return "at " + dateobj.getHours() + ":" + dateobj.getMinutes() + "am on " + (dateobj.getMonth()+1) + "/" + dateobj.getDate() + "!";
+			}else{
+				return "at " + (dateobj.getHours()-12) + ":" + dateobj.getMinutes() + "pm on " + (dateobj.getMonth()+1) + "/" + dateobj.getDate() + "!";
+			}
 		}
 	}
 })
+
+.filter('durationfilter', function() {
+	return function(duration, dateobj) {
+		var ending = dateobj.getTime() + duration * 60 * 60 * 1000;
+		var endingDate = new Date(ending);
+		if ((endingDate.getHours() - 12) < 0)
+		{
+			return endingDate.getHours() + ":" + endingDate.getMinutes() + " am.";
+		}else{
+			return endingDate.getHours()-12 + ":" + endingDate.getMinutes() + " pm.";
+		}
+	}
+})
+
 .filter('eventFilter', function() {
 	return function(input, expected, sel_categories) {
 		var res = [];
@@ -86,4 +115,4 @@ angular.module('myApp.map', ['ngRoute','ngMap', 'ngMaterial', 'myApp'])
 
 		return res;
 	}
-});
+})
